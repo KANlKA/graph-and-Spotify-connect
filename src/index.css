@@ -69,3 +69,8 @@
     @apply inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--badge-border))] bg-[hsl(var(--badge-bg))] px-3 py-1.5 text-xs font-medium text-foreground;
   }
 }
+@layer components {
+  .bento-icon {
+    @apply bento-card p-0 flex items-center justify-center;
+  }
+}

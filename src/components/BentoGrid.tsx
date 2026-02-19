@@ -6,10 +6,10 @@ import BentoMouseEffect from "./BentoMouseEffect";
 import LocationCard from "./LocationCard";
 import FeaturedWorkCard from "./FeaturedWorkCard";
 import SpotifyCard from "./SpotifyCard";
-import WeatherCard from "./WeatherCard";
 import LocalTimeCard from "./LocalTimeCard";
 import GithubActivityCard from "./GithubActivityCard";
 import TechStackCard from "./TechStackCard";
+import ProjectsCard from "./ProjectsCard";
 import SocialLinksRow from "./SocialLinksRow";
 
 interface Props {
@@ -26,42 +26,44 @@ export default function BentoGrid({ contributions, spotify, weather }: Props) {
 
         <section
           id="bento"
-          className="grid grid-cols-1 md:grid-cols-6 gap-4"
+          className="grid grid-cols-1 md:grid-cols-6 md:auto-rows-[120px] gap-4"
         >
-          {/* Location — 2 col × 2 row */}
-          <div className="md:col-span-2 md:row-span-2">
+          {/* Location */}
+          <div className="md:col-span-2 md:row-span-2 min-h-[320px]">
             <LocationCard />
           </div>
 
-          {/* Featured Work — 2 col × 2 row */}
+          {/* Featured Work */}
           <div className="md:col-span-2 md:row-span-2">
             <FeaturedWorkCard />
           </div>
 
-          {/* Spotify — 2 col × 1 row */}
+          {/* Spotify */}
           <div className="md:col-span-2">
             <SpotifyCard spotify={spotify} />
           </div>
 
-          {/* Weather — 2 col × 1 row */}
-          <div className="md:col-span-2">
-            <WeatherCard weather={weather} />
+          {/* Local Time + Weather */}
+          <div className="md:col-span-2 md:row-span-2">
+            <LocalTimeCard weather={weather} />
           </div>
 
-          {/* Local time + Social — 6 col full row */}
-          <div className="md:col-span-2">
-            <LocalTimeCard />
-          </div>
-          <div className="md:col-span-4">
+          {/* Social Row */}
+          <div className="md:col-span-2 h-full">
             <SocialLinksRow />
           </div>
 
-          {/* GitHub Activity — 3 col */}
+          {/* Projects */}
+          <div className="md:col-span-2">
+            <ProjectsCard />
+          </div>
+
+          {/* GitHub Activity */}
           <div className="md:col-span-3">
             <GithubActivityCard contributions={contributions} />
           </div>
 
-          {/* Tech Stack — 3 col */}
+          {/* Tech Stack */}
           <div className="md:col-span-3">
             <TechStackCard />
           </div>

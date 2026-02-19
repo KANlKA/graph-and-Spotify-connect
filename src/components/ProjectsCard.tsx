@@ -1,44 +1,27 @@
-import { ExternalLink } from "lucide-react";
-import BentoCard from "./BentoCard";
+"use client";
 
-const projects = [
-  { name: "Acme Dashboard", url: "acme.dev", status: "live", color: "bg-primary" },
-  { name: "Pixel Studio", url: "pixel.studio", status: "live", color: "bg-[hsl(var(--warm))]" },
-  { name: "Noted App", url: "noted.app", status: "live", color: "bento-gradient-accent" },
-];
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-const ProjectsCard = () => {
+export default function ProjectsCard() {
   return (
-    <BentoCard className="flex flex-col" >
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-4">Projects · Live</span>
+    <div className="bento-card group !p-0 h-full">
 
-      <div className="flex flex-col gap-3 flex-1">
-        {projects.map((project) => (
-          <div
-            key={project.name}
-            className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 p-3 transition-colors hover:bg-secondary/60 cursor-pointer"
-          >
-            <div className="flex items-center gap-3">
-              <div className={`h-8 w-8 rounded-lg ${project.color} flex items-center justify-center`}>
-                <span className="text-xs font-bold text-primary-foreground">{project.name[0]}</span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">{project.name}</p>
-                <p className="text-xs text-muted-foreground">{project.url}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-              </span>
-              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </BentoCard>
+      <Link
+        href="#projects"
+        className="flex size-full items-center justify-between px-6 py-6"
+      >
+        <p
+          className="relative font-medium text-foreground
+            after:absolute after:left-0 after:top-1/2 after:mt-3
+            after:h-0.5 after:w-0 after:content-['']
+            after:bg-foreground after:transition-all after:duration-300
+            group-hover:after:w-full"
+        >
+          Discover more projects
+        </p>
+        <ArrowRight className="size-6 text-foreground transition-all duration-300 group-hover:rotate-90" />
+      </Link>
+    </div>
   );
-};
-
-export default ProjectsCard;
+}
