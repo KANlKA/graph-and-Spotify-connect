@@ -1,86 +1,85 @@
 "use client";
 
-import { Layers } from "lucide-react";
+import {
+  Braces,
+  Container,
+  Database,
+  Layers,
+  Server,
+  Wind,
+} from "lucide-react";
 import Marquee from "./Marquee";
 
 const techIcons = [
-  {
-    name: "JavaScript",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/>
-      </svg>
-    ),
-  },
-  {
-    name: "Python",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.007 2.752h5.814v.826H3.9S0 5.789 0 11.969c0 6.18 3.403 5.96 3.403 5.96h2.03v-2.867s-.109-3.42 3.35-3.42h5.766s3.24.052 3.24-3.148V3.202S18.28 0 11.914 0zM8.708 1.85c.578 0 1.046.47 1.046 1.052 0 .581-.468 1.052-1.046 1.052-.579 0-1.046-.47-1.046-1.052 0-.581.467-1.052 1.046-1.052z"/>
-        <path d="M12.086 24c6.094 0 5.714-2.656 5.714-2.656l-.007-2.752h-5.814v-.826H20.1S24 18.211 24 12.031c0-6.18-3.403-5.96-3.403-5.96h-2.03v2.867s.109 3.42-3.35 3.42H9.451s-3.24-.052-3.24 3.148v5.292S5.72 24 12.086 24zm3.206-1.85c-.578 0-1.046-.47-1.046-1.052 0-.581.468-1.052 1.046-1.052.579 0 1.046.47 1.046 1.052 0 .581-.467 1.052-1.046 1.052z"/>
-      </svg>
-    ),
-  },
-  {
-    name: "Git",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.66 2.66c.645-.222 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.72.719-1.886.719-2.605 0-.538-.536-.656-1.343-.354-2.003l-2.48-2.48v6.53c.175.087.34.202.487.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.218-.089-.424-.224-.605-.405-.54-.538-.657-1.334-.359-1.998L7.636 3.67.45 10.854c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.159"/>
-      </svg>
-    ),
-  },
-  {
-    name: "Next.js",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 01-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.875 11.875 0 00-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 00-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 01-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 01-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 01.174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 004.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 002.466-2.163 11.944 11.944 0 002.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.86-8.292-8.208-9.695a12.597 12.597 0 00-2.499-.523A33.119 33.119 0 0011.572 0zm4.069 7.217c.347 0 .408.005.486.047a.473.473 0 01.237.277c.018.06.023 1.365.018 4.304l-.006 4.218-.744-1.14-.746-1.14v-3.066c0-1.982.01-3.097.023-3.15a.478.478 0 01.233-.296c.096-.05.13-.054.5-.054z"/>
-      </svg>
-    ),
-  },
-  {
-    name: "React",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M14.23 12.004a2.236 2.236 0 01-2.235 2.236 2.236 2.236 0 01-2.236-2.236 2.236 2.236 0 012.235-2.236 2.236 2.236 0 012.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.31 0-.592.068-.838.182-.79.37-1.264 1.267-1.264 2.655 0 1.168.308 2.55.865 4.068C4.218 9.28 3 10.72 3 12.004c0 1.289 1.222 2.728 2.871 3.773-.557 1.515-.863 2.896-.863 4.063 0 1.39.475 2.287 1.265 2.659.244.113.524.181.833.181 1.346 0 3.107-.96 4.889-2.622 1.78 1.653 3.541 2.602 4.887 2.602.31 0 .592-.068.837-.182.791-.372 1.266-1.269 1.266-2.659 0-1.167-.308-2.548-.866-4.063C19.781 14.733 21 13.293 21 12.004c0-1.284-1.218-2.724-2.866-3.77.558-1.517.866-2.9.866-4.068 0-1.388-.475-2.285-1.265-2.655a1.852 1.852 0 00-.838-.183zM12 16.878c-2.69 0-4.874-2.184-4.874-4.874S9.31 7.13 12 7.13s4.874 2.184 4.874 4.874-2.184 4.874-4.874 4.874z"/>
-      </svg>
-    ),
-  },
-  {
-    name: "Cloud",
-    el: (
-      <svg viewBox="0 0 24 24" className="h-8 w-8" fill="currentColor">
-        <path d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>
-      </svg>
-    ),
-  },
+  { name: "JavaScript", el: <Braces className="h-8 w-8" /> },
+  { name: "Python", el: <Database className="h-8 w-8" /> },
+  { name: "Git", el: <Layers className="h-8 w-8" /> },
+  { name: "Next.js", el: <Server className="h-8 w-8" /> },
+  { name: "React", el: <Layers className="h-8 w-8" /> },
+  { name: "TypeScript", el: <Braces className="h-8 w-8" /> },
+  { name: "Node.js", el: <Server className="h-8 w-8" /> },
+  { name: "Docker", el: <Container className="h-8 w-8" /> },
+  { name: "PostgreSQL", el: <Database className="h-8 w-8" /> },
+  { name: "Tailwind CSS", el: <Wind className="h-8 w-8" /> },
 ];
 
 const TechStackCard = () => {
   return (
     <div className="bento-card h-full flex flex-col overflow-hidden">
+      
+      {/* Header */}
       <div className="mb-4">
-        <span className="bento-badge">
-          <Layers className="h-3 w-3 text-primary" />
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/60 bg-zinc-800 px-2.5 py-1 text-xs font-medium text-white">
+          <Layers className="h-3 w-3 text-white" />
           Tech stack
         </span>
       </div>
 
-      <div className="flex-1 flex items-center min-h-0 overflow-hidden">
-        <Marquee pauseOnHover style={{ "--duration": "25s", "--gap": "1.5rem" } as React.CSSProperties} repeat={3}>
-          {techIcons.map((tech) => (
-            <div
-              key={tech.name}
-              title={tech.name}
-              className="flex items-center justify-center h-12 w-12 rounded-lg text-muted-foreground hover:text-foreground transition-colors shrink-0"
-            >
-              {tech.el}
-            </div>
-          ))}
-        </Marquee>
+      {/* Marquee Section */}
+      <div className="relative flex-1 flex items-center overflow-hidden">
+        
+        <div className="w-full">
+          <Marquee
+            pauseOnHover
+            style={{ "--duration": "25s", "--gap": "1.5rem" } as React.CSSProperties}
+            repeat={3}
+          >
+            {techIcons.map((tech) => (
+              <div
+                key={tech.name}
+                title={tech.name}
+                className="flex items-center justify-center h-12 w-12 rounded-lg text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              >
+                {tech.el}
+              </div>
+            ))}
+          </Marquee>
+        </div>
+
+        {/* LEFT subtle blur (masked) */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 w-16 backdrop-blur-sm"
+          style={{
+            maskImage: "linear-gradient(to right, black, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, black, transparent)",
+          }}
+        />
+
+        {/* RIGHT subtle blur (masked) */}
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 w-16 backdrop-blur-sm"
+          style={{
+            maskImage: "linear-gradient(to left, black, transparent)",
+            WebkitMaskImage: "linear-gradient(to left, black, transparent)",
+          }}
+        />
       </div>
 
+      {/* Footer Text */}
       <div className="mt-4">
-        <h3 className="text-base font-semibold text-foreground">Technologies I work with</h3>
+        <h3 className="text-base font-semibold text-foreground">
+          Technologies I work with
+        </h3>
         <p className="mt-1 text-sm text-muted-foreground">
           Designing and building reliable solutions across frontend, backend, and cloud.
         </p>

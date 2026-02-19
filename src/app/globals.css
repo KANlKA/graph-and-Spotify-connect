@@ -154,13 +154,14 @@ body {
   align-items: center;
   gap: 0.375rem;
   border-radius: 9999px;
-  border: 1px solid var(--color-border);
-  background-color: var(--color-secondary);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  background-color: #27272a;
   padding: 0.25rem 0.625rem;
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--color-muted-foreground);
+  color: #ffffff;
 }
+
 
 /* ── Mouse-tracking glow (applied by BentoMouseEffect) ───────────────────── */
 #bento:hover .bento-card::after {
@@ -206,6 +207,74 @@ body {
 .bento-card > * {
   position: relative;
   z-index: 2;
+}
+
+/* ── GitHub activity horizontal scrollbar ─────────────────────────────────── */
+.github-activity-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.26) transparent;
+}
+
+.github-activity-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.github-activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-activity-scroll::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: rgba(113, 113, 122, 0.26);
+}
+
+.github-activity-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(113, 113, 122, 0.42);
+}
+
+/* ── Icon hover treatment (white -> emerald) ─────────────────────────────── */
+.social-icon-link .social-icon {
+  color: #ffffff;
+}
+
+.social-icon-link:hover .social-icon {
+  color: #34d399;
+}
+
+.spotify-card .spotify-logo-icon {
+  color: #ffffff;
+}
+
+.spotify-card:hover .spotify-logo-icon {
+  color: #34d399;
+}
+
+/* ── Tech stack marquee edges ─────────────────────────────────────────────── */
+.techstack-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+}
+
+.techstack-edge-blur {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3.5rem;
+  z-index: 10;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.techstack-edge-blur-left {
+  left: 0;
+  background: linear-gradient(to right, var(--background) 20%, transparent 100%);
+}
+
+.techstack-edge-blur-right {
+  right: 0;
+  background: linear-gradient(to left, var(--background) 20%, transparent 100%);
 }
 
 /* ── Marquee animation ────────────────────────────────────────────────────── */

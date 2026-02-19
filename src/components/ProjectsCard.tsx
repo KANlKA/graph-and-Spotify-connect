@@ -10,10 +10,10 @@ export default function ProjectsCard() {
   const isInView = useInView(trackRef, { once: true });
 
   return (
-    <div className="bento-card group !p-0">
+    <div className="bento-card group !p-0 h-full">
       <Link
         href="#projects"
-        className="flex w-full flex-col justify-center px-6 py-4"
+        className="flex size-full flex-col justify-center px-6 py-6"
       >
         <div className="flex items-center justify-between">
           <p className="font-medium text-foreground">

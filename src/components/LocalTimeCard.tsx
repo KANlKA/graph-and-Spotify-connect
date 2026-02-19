@@ -21,13 +21,6 @@ export default function LocalTimeCard({ weather }: Props) {
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
 
-  const timeStr = time
-    ? `${time.getHours().toString().padStart(2, "0")}:${time
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}:${time.getSeconds().toString().padStart(2, "0")}`
-    : "--:--:--";
-
   const dateStr = time
     ? `${days[time.getDay()]}, ${months[time.getMonth()]} ${time.getDate()}`
     : "";
@@ -36,28 +29,32 @@ export default function LocalTimeCard({ weather }: Props) {
     .formatToParts(new Date())
     .find((p) => p.type === "timeZoneName")?.value ?? "";
 
-  return (
-    <div className="bento-card h-full flex flex-col gap-2 py-3">
+  const timeStr = time
+    ? `${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}:${time.getSeconds().toString().padStart(2, "0")}`
+    : "--:--:--";
 
-      <span className="bento-badge self-start flex items-center gap-1.5">
-        <Clock className="h-3 w-3 text-primary" />
+  return (
+    <div className="bento-card h-full flex flex-col justify-between">
+
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/60 bg-zinc-800 px-2.5 py-1 text-xs font-medium text-white self-start">
+        <Clock className="h-3 w-3 text-white" />
         Local time
       </span>
 
       <div>
-        <p className="text-4xl font-bold text-foreground tracking-tight tabular-nums leading-none">
+        <p className="text-5xl font-bold text-foreground tracking-tight tabular-nums leading-none">
           {timeStr}
         </p>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground mt-1.5">
           {dateStr}{tz ? ` · ${tz}` : ""}
         </p>
       </div>
 
       {weather.status === "ok" && (
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-lg">{weather.data.emoji}</span>
-          <span className="font-semibold text-foreground">{weather.data.temp}°C</span>
-          <span className="text-muted-foreground">· {weather.data.label}</span>
+        <div className="flex items-center gap-2">
+          <span>{weather.data.emoji}</span>
+          <span className="font-semibold text-foreground text-sm">{weather.data.temp}°C</span>
+          <span className="text-muted-foreground text-sm">· {weather.data.label}</span>
         </div>
       )}
     </div>
