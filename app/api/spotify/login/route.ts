@@ -15,7 +15,7 @@ export async function GET() {
       "user-read-currently-playing",
       "user-read-recently-played",
     ].join(" "),
-    redirect_uri: "http://localhost:3000/api/spotify/callback",
+    redirect_uri: "http://127.0.0.1:3000/api/spotify/callback",
   });
 
   redirect(`https://accounts.spotify.com/authorize?${params}`);

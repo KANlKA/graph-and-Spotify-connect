@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code,
-      redirect_uri: "http://localhost:3000/api/spotify/callback",
+      redirect_uri: "http://127.0.0.1:3000/api/spotify/callback",
     }),
     cache: "no-store",
   });

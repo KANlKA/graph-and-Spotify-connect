@@ -1,7 +1,7 @@
-import Image from "next/image";
-import { getSpotifyData, type SpotifyTrack, type RecentTrack } from "./lib/spotify";
+import { getSpotifyData } from "./lib/spotify";
+import { getWeather } from "./lib/weather";
 
-// ─── GitHub types ────────────────────────────────────────────────────────────
+// ─── GitHub types ─────────────────────────────────────────────────────────────
 
 export interface Contribution {
   date: string;
@@ -24,14 +24,12 @@ const LEVEL_COLORS = [
   "bg-[#216e39] dark:bg-[#39d353]",
 ];
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const DAYS = ["", "Mon", "", "Wed", "", "Fri", ""];
 
 function groupByWeek(contributions: Contribution[]): Contribution[][] {
   const weeks: Contribution[][] = [];
-  for (let i = 0; i < contributions.length; i += 7) {
-    weeks.push(contributions.slice(i, i + 7));
-  }
+  for (let i = 0; i < contributions.length; i += 7) weeks.push(contributions.slice(i, i + 7));
   return weeks;
 }
 
@@ -40,10 +38,7 @@ function getMonthLabels(weeks: Contribution[][]): { label: string; col: number }
   let lastMonth = -1;
   weeks.forEach((week, col) => {
     const month = new Date(week[0].date).getMonth();
-    if (month !== lastMonth) {
-      labels.push({ label: MONTHS[month], col });
-      lastMonth = month;
-    }
+    if (month !== lastMonth) { labels.push({ label: MONTHS[month], col }); lastMonth = month; }
   });
   return labels;
 }
@@ -59,65 +54,26 @@ async function fetchContributions(): Promise<ContributionsResponse> {
   return res.json();
 }
 
-// ─── Spotify sub-components ───────────────────────────────────────────────────
-
-function TrackCard({ track, meta }: { track: SpotifyTrack; meta?: React.ReactNode }) {
-  const art = track.album.images[0]?.url;
-  const artists = track.artists.map((a) => a.name).join(", ");
-
-  return (
-    <a
-      href={track.external_urls.spotify}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-[#161b22] transition-colors group"
-    >
-      {art && (
-        <Image
-          src={art}
-          alt={track.album.name}
-          width={48}
-          height={48}
-          className="rounded-md shrink-0 shadow-sm"
-        />
-      )}
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-[#1DB954]">
-          {track.name}
-        </p>
-        <p className="truncate text-xs text-gray-500 dark:text-gray-400">{artists}</p>
-        {meta && <div className="mt-0.5">{meta}</div>}
-      </div>
-    </a>
-  );
-}
-
-function NowPlayingBars() {
-  return (
-    <span className="inline-flex items-end gap-[2px] h-3">
-      {[1, 2, 3].map((i) => (
-        <span
-          key={i}
-          style={{ animationDelay: `${i * 0.15}s` }}
-          className="inline-block w-[3px] bg-[#1DB954] rounded-sm animate-bounce"
-          aria-hidden
-        />
-      ))}
-    </span>
-  );
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function Home() {
-  const [contributions, spotify] = await Promise.all([
+  const [contributions, spotify, weather] = await Promise.all([
     fetchContributions(),
     getSpotifyData(),
+    getWeather(),
   ]);
 
   const weeks = groupByWeek(contributions.contributions);
   const monthLabels = getMonthLabels(weeks);
   const totalThisYear = Object.values(contributions.total).reduce((a, b) => a + b, 0);
+
+  // Resolve the one track we want to display
+  const lastTrack =
+    spotify.status === "playing"
+      ? { name: spotify.item.track.name, artist: spotify.item.track.artists.map((a) => a.name).join(", "), time: "Now playing", url: spotify.item.track.external_urls.spotify }
+      : spotify.status === "recent" && spotify.items[0]
+      ? { name: spotify.items[0].track.name, artist: spotify.items[0].track.artists.map((a) => a.name).join(", "), time: new Date(spotify.items[0].played_at).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }), url: spotify.items[0].track.external_urls.spotify }
+      : null;
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0d1117] flex items-center justify-center px-4 py-16">
@@ -152,10 +108,7 @@ export default async function Home() {
                 {/* Day labels */}
                 <div className="flex flex-col gap-[3px] mr-1">
                   {DAYS.map((day, i) => (
-                    <div
-                      key={i}
-                      className="h-[11px] text-[10px] text-gray-500 dark:text-gray-400 leading-[11px] w-6 text-right pr-1"
-                    >
+                    <div key={i} className="h-[11px] text-[10px] text-gray-500 dark:text-gray-400 leading-[11px] w-6 text-right pr-1">
                       {day}
                     </div>
                   ))}
@@ -191,86 +144,109 @@ export default async function Home() {
             {Object.entries(contributions.total)
               .sort(([a], [b]) => Number(b) - Number(a))
               .map(([year, count]) => (
-                <div
-                  key={year}
-                  className="rounded-md border border-gray-200 dark:border-[#30363d] px-4 py-2 text-sm"
-                >
+                <div key={year} className="rounded-md border border-gray-200 dark:border-[#30363d] px-4 py-2 text-sm">
                   <span className="font-medium text-gray-900 dark:text-gray-100">{year}</span>
-                  <span className="ml-2 text-gray-500 dark:text-gray-400">
-                    {count.toLocaleString()} contributions
-                  </span>
+                  <span className="ml-2 text-gray-500 dark:text-gray-400">{count.toLocaleString()} contributions</span>
                 </div>
               ))}
           </div>
         </section>
 
         {/* ── Spotify Section ── */}
-        <section>
-          <div className="mb-5 flex items-center gap-2">
-            {/* Spotify logo mark */}
-            <svg viewBox="0 0 168 168" width="20" height="20" aria-hidden>
-              <path
-                fill="#1DB954"
-                d="M84 0C37.6 0 0 37.6 0 84s37.6 84 84 84 84-37.6 84-84S130.4 0 84 0zm38.6 121.1c-1.5 2.5-4.8 3.3-7.3 1.8-20-12.2-45.2-15-74.9-8.2-2.9.7-5.7-1.1-6.4-4-.7-2.9 1.1-5.7 4-6.4 32.5-7.4 60.4-4.2 82.9 9.5 2.5 1.5 3.3 4.8 1.7 7.3zm10.3-22.9c-1.9 3.1-6 4.1-9.1 2.2-22.9-14.1-57.8-18.2-84.9-9.9-3.4 1-7-1-8-4.4-1-3.4 1-7 4.4-8 30.9-9.4 69.3-4.9 95.5 11.3 3.1 1.9 4.1 6 2.1 9.1v-.3zm.9-23.8C112 60.2 71.1 58.8 44.5 67c-4 1.2-8.2-1-9.4-5.1-1.2-4 1-8.2 5.1-9.4 30.5-9.3 81.2-7.5 113.1 11.1 3.7 2.1 4.9 6.8 2.7 10.5-2.1 3.6-6.8 4.9-10.5 2.7l.3.5z"
-              />
-            </svg>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              {spotify.status === "playing" ? "Now Playing" : "Recently Played"}
-            </h2>
-            {spotify.status === "playing" && <NowPlayingBars />}
-          </div>
+<section className="mt-8 w-full max-w-2xl mx-auto">
+  <h2 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-3">
+    Last Played
+  </h2>
 
-          {spotify.status === "unconfigured" && (
-            <div className="rounded-lg border border-dashed border-gray-300 dark:border-[#30363d] p-6 text-sm text-gray-500 dark:text-gray-400">
-              <p className="font-medium text-gray-700 dark:text-gray-300 mb-1">Spotify not configured</p>
-              <p>
-                Add <code className="bg-gray-100 dark:bg-[#161b22] px-1 rounded">SPOTIFY_CLIENT_ID</code>,{" "}
-                <code className="bg-gray-100 dark:bg-[#161b22] px-1 rounded">SPOTIFY_CLIENT_SECRET</code>, and{" "}
-                <code className="bg-gray-100 dark:bg-[#161b22] px-1 rounded">SPOTIFY_REFRESH_TOKEN</code> to{" "}
-                <code className="bg-gray-100 dark:bg-[#161b22] px-1 rounded">.env.local</code>, then visit{" "}
-                <code className="bg-gray-100 dark:bg-[#161b22] px-1 rounded">/api/spotify/login</code> to authorize.
-              </p>
-            </div>
+  {spotify.status === "unconfigured" && (
+    <p className="text-zinc-400 text-sm">Spotify not configured</p>
+  )}
+  {spotify.status === "error" && (
+    <p className="text-zinc-400 text-sm">Could not load</p>
+  )}
+
+  {lastTrack && (
+    <a
+      href={lastTrack.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-5 w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-all duration-300 shadow-sm hover:shadow-md px-6 py-5"
+    >
+      {/* Spotify green circle icon */}
+      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#1DB954] flex items-center justify-center shadow-md">
+        <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.516 17.318c-.214.34-.67.444-1.01.23-2.765-1.69-6.246-2.073-10.35-1.135-.394.09-.79-.155-.88-.55-.09-.394.155-.79.55-.88 4.487-1.026 8.332-.585 11.44 1.315.34.214.444.67.23 1.02zm1.472-3.27c-.27.43-.845.564-1.274.294-3.164-1.944-7.986-2.508-11.73-1.372-.484.146-.995-.128-1.14-.612-.147-.484.127-.995.61-1.14 4.274-1.298 9.586-.668 13.24 1.566.43.27.564.846.294 1.274zm.127-3.408C15.36 8.498 9.7 8.3 6.327 9.33c-.582.176-1.196-.152-1.372-.734-.176-.583.152-1.196.734-1.372C9.574 6.08 15.87 6.31 19.524 8.57c.525.316.696 1 .38 1.524-.316.524-1 .695-1.524.38l.735-.434z" />
+        </svg>
+      </div>
+
+      {/* Track info */}
+      <div className="flex flex-col flex-1 min-w-0">
+        <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">
+          {lastTrack.time}
+        </span>
+        <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-[#1DB954] transition-colors duration-200">
+          {lastTrack.name}
+        </span>
+        <span className="text-sm text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+          {lastTrack.artist}
+        </span>
+      </div>
+
+      {/* Chevron arrow */}
+      <svg
+        className="flex-shrink-0 w-4 h-4 text-zinc-300 dark:text-zinc-600 group-hover:text-[#1DB954] group-hover:translate-x-0.5 transition-all duration-200"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  )}
+</section>
+
+        {/* ── Weather Section ── */}
+        <section className="w-full max-w-2xl mx-auto">
+          <h2 className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-3">
+            Weather
+          </h2>
+
+          {weather.status === "unconfigured" && (
+            <p className="text-zinc-400 text-sm">
+              Set <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">WEATHER_CITY</code> in <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">.env.local</code> to show weather.
+            </p>
           )}
 
-          {spotify.status === "error" && (
-            <p className="text-sm text-red-500">Could not load Spotify data.</p>
+          {weather.status === "error" && (
+            <p className="text-zinc-400 text-sm">Could not load weather.</p>
           )}
 
-          {spotify.status === "playing" && (
-            <div className="rounded-lg border border-gray-200 dark:border-[#30363d] divide-y divide-gray-100 dark:divide-[#21262d]">
-              <TrackCard
-                track={spotify.item.track}
-                meta={
-                  <span className="text-[10px] font-medium text-[#1DB954]">PLAYING NOW</span>
-                }
-              />
-            </div>
-          )}
+          {weather.status === "ok" && (
+            <div className="flex items-center gap-5 w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm px-6 py-5">
+              {/* Emoji in circle */}
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-sky-100 dark:bg-sky-900/40 flex items-center justify-center text-2xl">
+                {weather.data.emoji}
+              </div>
 
-          {spotify.status === "recent" && (
-            <div className="rounded-lg border border-gray-200 dark:border-[#30363d] divide-y divide-gray-100 dark:divide-[#21262d]">
-              {spotify.items.map((item: RecentTrack) => (
-                <TrackCard
-                  key={`${item.track.id}-${item.played_at}`}
-                  track={item.track}
-                  meta={
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500">
-                      {new Date(item.played_at).toLocaleString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                  }
-                />
-              ))}
+              {/* Info */}
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">
+                  {weather.data.city}
+                </span>
+                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                  {weather.data.temp}°C · {weather.data.label}
+                </span>
+                <span className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Feels like {weather.data.feelsLike}°C
+                </span>
+              </div>
             </div>
           )}
         </section>
 
       </div>
     </div>
+
   );
 }
