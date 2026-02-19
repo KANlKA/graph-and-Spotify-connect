@@ -8,8 +8,7 @@ const MapLocation = dynamic(() => import("./MapLocation"), { ssr: false });
 export default function LocationCard() {
   return (
     <div
-      className="relative overflow-hidden rounded-[1rem] border border-border bg-card w-full"
-      style={{ height: "320px" }}
+      className="relative overflow-hidden rounded-[1rem] border border-border bg-card w-full h-full"
     >
       <div className="absolute top-4 left-4 z-[1000]">
         <span className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0d1117]/90 backdrop-blur-sm border border-zinc-700/40 text-sm font-semibold text-white select-none">

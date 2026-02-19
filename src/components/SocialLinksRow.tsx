@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 const SocialLinksRow = () => {
   return (
-    <div className="flex items-center gap-2 h-full w-full">
+    <div className="flex items-center gap-2 h-12 w-12">
       {/* X / Twitter */}
       <div className="bento-card flex flex-1 items-center justify-center h-full p-0">
         <svg className="h-12 w-12 text-foreground" viewBox="0 0 24 24" fill="currentColor">

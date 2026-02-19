@@ -2,9 +2,8 @@
 
 import "leaflet/dist/leaflet.css";
 
-import { Map as MapLeaflet, type ZoomPanOptions } from "leaflet";
-import { useRef, useState } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
+import type { Map as LeafletMap, ZoomPanOptions } from "leaflet";
 
 import { Minus } from "@/components/icons/Minus";
 import { Plus } from "@/components/icons/Plus";
@@ -48,8 +47,45 @@ const ZoomButton = ({ onClick, children, className, hide }: ZoomButtonProps) => 
 );
 
 export default function MapLocation() {
-  const mapRef = useRef<MapLeaflet>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
   const [currentZoom, setCurrentZoom] = useState(MAX_ZOOM);
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+
+    let map: LeafletMap;
+
+    import("leaflet").then((L) => {
+      if (!containerRef.current || mapRef.current) return;
+
+      map = L.map(containerRef.current, {
+        center: [LATITUDE, LONGITUDE],
+        zoom: MAX_ZOOM,
+        dragging: false,
+        touchZoom: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        zoomControl: false,
+        attributionControl: false,
+      });
+
+      L.tileLayer(MAP_URL, {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+      }).addTo(map);
+
+      mapRef.current = map;
+    });
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, []);
 
   const zoomIn = () => {
     setCurrentZoom((prev) => {
@@ -69,29 +105,13 @@ export default function MapLocation() {
 
   return (
     <div className="relative group h-full">
-      <MapContainer
-        ref={mapRef}
-        zoom={MAX_ZOOM}
-        center={[LATITUDE, LONGITUDE]}
-        dragging={false}
-        touchZoom={false}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        zoomControl={false}
-        attributionControl={false}
+      <div
+        ref={containerRef}
         className={cn(
           "brightness-[0.64] -hue-rotate-[24deg] saturate-[0.86]",
           "h-full min-h-full w-full"
         )}
-        trackResize
-      >
-        <TileLayer
-          url={MAP_URL}
-          tileSize={512}
-          zoomOffset={-1}
-          minZoom={1}
-        />
-      </MapContainer>
+      />
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[500]">
         <div className="relative size-16">

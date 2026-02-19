@@ -1,26 +1,36 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { motion, useInView } from "framer-motion";
 
 export default function ProjectsCard() {
-  return (
-    <div className="bento-card group !p-0 h-full">
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(trackRef, { once: true });
 
+  return (
+    <div className="bento-card group !p-0">
       <Link
         href="#projects"
-        className="flex size-full items-center justify-between px-6 py-6"
+        className="flex w-full flex-col justify-center px-6 py-4"
       >
-        <p
-          className="relative font-medium text-foreground
-            after:absolute after:left-0 after:top-1/2 after:mt-3
-            after:h-0.5 after:w-0 after:content-['']
-            after:bg-foreground after:transition-all after:duration-300
-            group-hover:after:w-full"
-        >
-          Discover more projects
-        </p>
-        <ArrowRight className="size-6 text-foreground transition-all duration-300 group-hover:rotate-90" />
+        <div className="flex items-center justify-between">
+          <p className="font-medium text-foreground">
+            Discover more projects
+          </p>
+          <ArrowRight className="size-6 text-foreground transition-all duration-300 group-hover:rotate-90" />
+        </div>
+
+        {/* ref on the container — has real dimensions, IntersectionObserver fires */}
+        <div ref={trackRef} className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-border">
+          <motion.div
+            className="h-full rounded-full bg-emerald-400"
+            initial={{ width: "0%" }}
+            animate={{ width: isInView ? "100%" : "0%" }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          />
+        </div>
       </Link>
     </div>
   );

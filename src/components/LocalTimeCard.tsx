@@ -37,7 +37,8 @@ export default function LocalTimeCard({ weather }: Props) {
     .find((p) => p.type === "timeZoneName")?.value ?? "";
 
   return (
-    <div className="bento-card h-full flex flex-col justify-between">
+    <div className="bento-card flex flex-col gap-2 py-3">
+
       <span className="bento-badge self-start flex items-center gap-1.5">
         <Clock className="h-3 w-3 text-primary" />
         Local time

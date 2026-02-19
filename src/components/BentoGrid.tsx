@@ -21,7 +21,7 @@ interface Props {
 export default function BentoGrid({ contributions, spotify, weather }: Props) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-5xl">
+      <div className="mx-auto w-full max-w-5xl" >
         <BentoMouseEffect />
 
         <section
@@ -29,14 +29,14 @@ export default function BentoGrid({ contributions, spotify, weather }: Props) {
           className="grid grid-cols-1 md:grid-cols-6 md:auto-rows-[120px] gap-4"
         >
           {/* Location */}
-          <div className="md:col-span-2 md:row-span-2 min-h-[320px]">
+          <div className="md:col-span-2 md:row-span-2 h-full">
             <LocationCard />
           </div>
 
           {/* Featured Work */}
-          <div className="md:col-span-2 md:row-span-2">
-            <FeaturedWorkCard />
-          </div>
+         <div className="md:col-span-2 md:row-span-2 h-full">
+  <FeaturedWorkCard />
+</div>
 
           {/* Spotify */}
           <div className="md:col-span-2">
@@ -44,7 +44,7 @@ export default function BentoGrid({ contributions, spotify, weather }: Props) {
           </div>
 
           {/* Local Time + Weather */}
-          <div className="md:col-span-2 md:row-span-2">
+          <div className="md:col-span-2 md:row-span-2 md:self-start">
             <LocalTimeCard weather={weather} />
           </div>
 
@@ -54,19 +54,18 @@ export default function BentoGrid({ contributions, spotify, weather }: Props) {
           </div>
 
           {/* Projects */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 md:self-start">
             <ProjectsCard />
           </div>
 
-          {/* GitHub Activity */}
-          <div className="md:col-span-3">
-            <GithubActivityCard contributions={contributions} />
-          </div>
+          <div className="md:col-span-3 md:row-span-2 h-full -mt-24">
+  <GithubActivityCard contributions={contributions} />
+</div>
 
-          {/* Tech Stack */}
-          <div className="md:col-span-3">
-            <TechStackCard />
-          </div>
+<div className="md:col-span-3 md:row-span-2 h-full -mt-8">
+  <TechStackCard />
+</div>
+
         </section>
       </div>
     </div>
